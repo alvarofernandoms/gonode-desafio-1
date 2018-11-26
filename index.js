@@ -13,15 +13,19 @@ nunjucks.configure('views', {
 app.use(bodyParser.urlencoded({ extended: true }))
 app.set('view engine', 'njk')
 
+const checkMajorMinorRoutes = (req, res, next) => {
+  return !req.query.idade ? res.redirect('/') : next()
+}
+
 app.get('/', (req, res) => {
   return res.render('initial')
 })
 
-app.get('/major', (req, res) => {
+app.get('/major', checkMajorMinorRoutes, (req, res) => {
   return res.render('major', { age: req.query.idade })
 })
 
-app.get('/minor', (req, res) => {
+app.get('/minor', checkMajorMinorRoutes, (req, res) => {
   return res.render('minor', { age: req.query.idade })
 })
 
